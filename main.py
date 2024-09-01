@@ -1,41 +1,36 @@
-from lookup import PT
-import re
+from custom import CustomStoicImpl
+from interf import Compound, StoicInterface
+from util import ANSI
+import sys
 
-RE_CHAR_NUM = re.compile("([a-zA-Z]+)([0-9]+)")
-# https://www.geeksforgeeks.org/python-splitting-text-and-number-in-string/
+VERSION = "v1.0"
+print(f"Stoichiometry {VERSION} | MIT")
 
-# Molar Mass Calculator
+stoic: StoicInterface
 
-R = re.split(" |, |\\+",
-             input("Reactants: "))
+intf = input("""
+Choose your calculator. Choices---
+    a. Custom-Written
+    b. Chempy (recommended for accuracy but requires: chempy)
+Please specify: [ """).lower().strip()
 
-R = (v.strip() for v in R)
+print("Selected interface--", end="")
 
-# Remove ''s
-R = filter(None, R)
-R = filter(bool, R)
-R = filter(len, R)
-R = filter(lambda v: v, R)
-R = list(R)
+# Python2 doesn't have switch statements :(
+if intf == "a":
+    stoic = CustomStoicImpl()
+    print("CUSTOM WRITTEN")
+elif intf == "b":
+    # TODO Test for package
+    stoic = None
+    print("CHEMPY")
+else:
+    print(ANSI.RED + f"Unidentified '{intf}'")
+    sys.exit(-1)
 
-R_mass: float = 0
-
-c: str
-e: str
-for (i, c) in enumerate(R):
-    res = RE_CHAR_NUM.match(c).groups()
-    es = re.findall("[A-Z][^A-Z]*", c)
-    print(es)
-
-
-    for e in es:
-        if e in PT:
-            # n =
-            R_mass += PT[e][1]
-        else:
-            print(f"'{e}' is not a valid element.")
-
-print(f"Relative Molecular Mass: {R_mass}")
-
-
+try:
+    c = Compound("")
+    print(c.formula)
+except Exception as e:
+    print(ANSI.RED + e.args[0])
 
