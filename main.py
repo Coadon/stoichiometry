@@ -1,5 +1,5 @@
 from custom import CustomStoicImpl
-from interf import Compound, StoicInterface
+from interf import Molecule, StoicInterface
 from util import ANSI
 import sys
 
@@ -29,7 +29,7 @@ else:
     sys.exit(-1)
 
 try:
-    c = Compound("")
+    c = Molecule("")
     print(c.formula)
 except Exception as e:
     print(ANSI.RED + e.args[0])

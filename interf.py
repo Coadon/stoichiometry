@@ -9,8 +9,8 @@ class StoicException(Exception):
     pass
 
 
-class Compound:
-    """ Compound """
+class Molecule:
+    """ Molecule. Substance """
 
     def __init__(self, formula: str):
         self._formula = formula
@@ -32,19 +32,19 @@ class Compound:
 class StoicInterface:
     """ Stoic interface """
 
-    def cal_molar_mass(self, c: Compound) -> float:
+    def cal_molar_mass(self, c: Molecule) -> float:
         pass
 
-    def cal_moles(self, c: Compound, mass) -> float:
+    def cal_moles(self, c: Molecule, mass) -> float:
         pass
 
-    def cal_mass(self, c: Compound, moles) -> float:
+    def cal_mass(self, c: Molecule, moles) -> float:
         pass
 
     """ Returns None if impossible """
 
-    def balance(self, r: set[Compound], p: set[Compound]) \
-            -> tuple[set[Compound], set[Compound]]:
+    def balance(self, r: set[Molecule], p: set[Molecule]) \
+            -> tuple[set[Molecule], set[Molecule]]:
         pass
 
     """ Percentage Yield """
