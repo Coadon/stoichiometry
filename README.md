@@ -17,6 +17,11 @@ things chemistry, please use [chempy](https://github.com/bjodah/chempy).
 
 The `chempy.util.stoich` module provides all things stoichiometry there.
 
+> Stoichiometry word origin: early 19th century: from Greek stoikheion ‘element’ + -metry.
+>
+> 化学计量学, 化學計量, 化学量論, στοιχειομετρία, стехиометрия, 
+> estequiometría, stoechiométrie, stoikiometri, สโตอิจิโอเมทรี, स्तुईचिओमेटरी.
+
 ## Specifications
 
 Calculations are done with either 
