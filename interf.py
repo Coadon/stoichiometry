@@ -4,7 +4,6 @@ Computational Interfaces.
 
 """
 
-
 class StoicException(Exception):
     pass
 
@@ -31,6 +30,7 @@ class Molecule:
 
 class StoicInterface:
     """ Stoic interface """
+    if_type: int = 0
 
     def cal_molar_mass(self, c: Molecule) -> float:
         pass

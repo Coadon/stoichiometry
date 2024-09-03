@@ -4,7 +4,7 @@ Stoic implemented with custom-written algorithms.
 Experimental.
 
 """
-from interf import StoicInterface
+from interf import StoicInterface, Molecule
 from lookup import PT
 import re
 
@@ -51,6 +51,10 @@ def do_stuff():
 
     print(f"Relative Molecular Mass: {R_mass}")
 
+class CustomMolecule(Molecule):
+    def __init__(self, formula: str):
+        super().__init__(formula)
+        print("HI")
 
 class CustomStoicImpl(StoicInterface):
     # TODO Stoic
