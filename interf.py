@@ -3,56 +3,64 @@
 Computational Interfaces.
 
 """
+import re
+from abc import ABCMeta, abstractmethod
+from typing import List, Any
+
+RE_SPLIT = re.compile(" |, |\\+", )
+RE_SPLIT_CAPS = re.compile("[A-Z][^A-Z]*")
+
 
 class StoicException(Exception):
     pass
 
 
-class Molecule:
+class Molecule(metaclass=ABCMeta):
     """ Molecule. Substance """
+    _formula: list[str]
 
+    @abstractmethod
     def __init__(self, formula: str):
-        self._formula = formula
-        if self._formula == "":
-            raise StoicException("Formula empty. Not accepted.")
+        self._formula = RE_SPLIT_CAPS.findall(formula)
         pass
 
     @property
     def molar_mass(self) -> float:
-        return 0
-        pass
+        raise NotImplementedError
 
     @property
     def formula(self) -> str:
-        return self._formula
-        pass
+        raise NotImplementedError
+
+    def __repr__(self):
+        return self.formula
 
 
-class StoicInterface:
+class StoicInterface(metaclass=ABCMeta):
     """ Stoic interface """
-    if_type: int = 0
+    impl_type: int = 0
 
     def cal_molar_mass(self, c: Molecule) -> float:
-        pass
+        raise NotImplementedError
 
     def cal_moles(self, c: Molecule, mass) -> float:
-        pass
+        raise NotImplementedError
 
     def cal_mass(self, c: Molecule, moles) -> float:
-        pass
+        raise NotImplementedError
 
     """ Returns None if impossible """
 
     def balance(self, r: set[Molecule], p: set[Molecule]) \
             -> tuple[set[Molecule], set[Molecule]]:
-        pass
+        raise NotImplementedError
 
     """ Percentage Yield """
 
     def cal_p_y(self) -> float:
-        pass
+        raise NotImplementedError
 
     """ Atom Economy """
 
     def cal_a_e(self) -> float:
-        pass
+        raise NotImplementedError
