@@ -1,4 +1,5 @@
 from custom import StoicCustomImpl, MoleculeCustomImpl
+from formula_parse import ChemFormulaException
 from interf import Molecule, StoicInterface
 from util import ANSI
 import sys
@@ -14,7 +15,9 @@ def molecule(formula: str):
 
 
 try:
-    c = molecule("NaCl")
+    c = molecule("NaCl((Na))kkk")
     print(c)
+except ChemFormulaException as e:
+    print(ANSI.RED + "Error parsing: " + e.args[0])
 except Exception as e:
     print(ANSI.RED + e.args[0])

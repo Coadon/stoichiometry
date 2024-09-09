@@ -3,12 +3,7 @@
 Computational Interfaces.
 
 """
-import re
 from abc import ABCMeta, abstractmethod
-from typing import List, Any
-
-RE_SPLIT = re.compile(" |, |\\+", )
-RE_SPLIT_CAPS = re.compile("[A-Z][^A-Z]*")
 
 
 class StoicException(Exception):
@@ -17,11 +12,9 @@ class StoicException(Exception):
 
 class Molecule(metaclass=ABCMeta):
     """ Molecule. Substance """
-    _formula: list[str]
 
     @abstractmethod
-    def __init__(self, formula: str):
-        self._formula = RE_SPLIT_CAPS.findall(formula)
+    def __init__(self):
         pass
 
     @property
@@ -32,8 +25,12 @@ class Molecule(metaclass=ABCMeta):
     def formula(self) -> str:
         raise NotImplementedError
 
+    @property
+    def counts(self) -> dict:
+        raise NotImplementedError
+
     def __repr__(self):
-        return self.formula
+        return self.counts
 
 
 class StoicInterface(metaclass=ABCMeta):
