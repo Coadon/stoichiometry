@@ -1,12 +1,14 @@
 import re
 from collections import defaultdict
 
+from interf import Molecule
 from lookup import PT
 
 RE_LETTER = re.compile(r"([A-Z][a-z]*)")
 RE_NUMBER = re.compile(r"(\d+)")
 RE_OPEN = re.compile(r"([(\[{])")
 RE_CLOSE = re.compile(r"([)\]}])")
+RE_SPACE = re.compile(r" |, |\+")
 
 
 class ChemFormulaException(Exception):
@@ -70,3 +72,39 @@ def parse_formula(formula: str) -> dict:
         raise ChemFormulaException("Unclosed parenthesis!")
 
     return dict(counts)
+
+
+def count_mix(mix: dict[Molecule, int]) -> dict[str, int]:
+    """ Calculate a mix of molecules """
+    counts: defaultdict = defaultdict(int)
+
+    for mole, mole_cnt in mix.items():
+        for ele, ele_cnt in mole.counts.items():
+            counts[ele] += mole_cnt * ele_cnt
+
+    return dict(counts)
+
+
+def construct_mix(s: str) -> dict[Molecule, int]:
+    from src.custom import MoleculeImpl
+
+    parts: list[str] = RE_SPACE.split(s)
+    full: defaultdict = defaultdict(int)
+
+    parts = list(filter(None, parts))
+    parts = list(filter(bool, parts))
+    parts = list(filter(len, parts))
+    parts = list(filter(lambda item: item, parts))
+
+    for part in parts:
+        count: int
+        i: int = 0
+        if number := RE_NUMBER.match(part, i):
+            count = int(number.group(1))
+            i += len(number.group(1))
+        else:
+            count = 1
+
+        full[MoleculeImpl(part[i:])] += count
+
+    return full

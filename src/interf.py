@@ -6,11 +6,13 @@ Computational Interfaces.
 from abc import ABCMeta, abstractmethod
 
 
+
 class StoicException(Exception):
     pass
 
 
-class Molecule(dict[str, int]):
+class Molecule(metaclass=ABCMeta):
+    # NOTE Do not inherit Molecule from dict[str, int].
     """ Molecule. Substance """
 
     @abstractmethod
@@ -29,10 +31,43 @@ class Molecule(dict[str, int]):
     def counts(self) -> dict[str, int]:
         raise NotImplementedError
 
+    def to_mass(self, moles: float) -> float:
+        raise NotImplementedError
+
+    def to_moles(self, mass: float) -> float:
+        raise NotImplementedError
+
+    def __expr__(self):
+        return self.counts
+
+    # TODO Iteration
+    def __iter__(self):
+        pass
+
+    def __next__(self):
+        pass
+
+
+class Mixture(dict[Molecule, int]):
+    @abstractmethod
+    def __init__(self):
+        super().__init__()
+
+    @property
+    def counts(self) -> dict[str, int]:
+        raise NotImplementedError
+
+    @property
+    def raw(self) -> dict[Molecule, int]:
+        raise NotImplementedError
+
 
 class StoicInterface(metaclass=ABCMeta):
     """ Stoic interface """
-    impl_type: int = 0
+
+    @property
+    def impl_type(self):
+        raise NotImplementedError
 
     def cal_molar_mass(self, c: Molecule) -> float:
         raise NotImplementedError
@@ -43,18 +78,14 @@ class StoicInterface(metaclass=ABCMeta):
     def cal_mass(self, c: Molecule, moles) -> float:
         raise NotImplementedError
 
-    """ Returns None if impossible """
-
-    def balance(self, r: set[Molecule], p: set[Molecule]) \
-            -> tuple[set[Molecule], set[Molecule]]:
+    def balance(self, reactants: Mixture, p: Mixture) -> tuple[Mixture, Mixture]:
+        """ Returns None if impossible """
         raise NotImplementedError
-
-    """ Percentage Yield """
 
     def cal_p_y(self) -> float:
+        """ Percentage Yield """
         raise NotImplementedError
 
-    """ Atom Economy """
-
     def cal_a_e(self) -> float:
+        """ Atom Economy """
         raise NotImplementedError
