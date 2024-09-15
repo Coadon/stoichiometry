@@ -12,14 +12,13 @@ import re
 
 class MoleculeCustomImpl(Molecule):
     _formula: str = None
-    _counts: dict
 
     def __init__(self, formula: str):
         super().__init__()
         if not formula:
             raise StoicException("Formula empty. Not accepted.")
 
-        self._counts = parse_formula(formula)
+        self.values = parse_formula(formula)
         self._formula = formula
 
     @property
@@ -30,7 +29,7 @@ class MoleculeCustomImpl(Molecule):
 
     @property
     def counts(self) -> dict:
-        return self._counts
+        return self.values
 
 
 class StoicCustomImpl(StoicInterface):

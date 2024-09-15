@@ -10,12 +10,12 @@ class StoicException(Exception):
     pass
 
 
-class Molecule(metaclass=ABCMeta):
+class Molecule(dict[str, int]):
     """ Molecule. Substance """
 
     @abstractmethod
     def __init__(self):
-        pass
+        super().__init__()
 
     @property
     def molar_mass(self) -> float:
@@ -26,11 +26,8 @@ class Molecule(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def counts(self) -> dict:
+    def counts(self) -> dict[str, int]:
         raise NotImplementedError
-
-    def __repr__(self):
-        return self.counts
 
 
 class StoicInterface(metaclass=ABCMeta):
