@@ -6,14 +6,16 @@ Computational Interfaces.
 from abc import ABCMeta, abstractmethod
 
 
-
 class StoicException(Exception):
     pass
 
 
-class Molecule(metaclass=ABCMeta):
+class Compound(metaclass=ABCMeta):
     # NOTE Do not inherit Molecule from dict[str, int].
-    """ Molecule. Substance """
+    """
+    Interface: Molecule. Substance
+    Uses
+    """
 
     @abstractmethod
     def __init__(self):
@@ -28,7 +30,8 @@ class Molecule(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def counts(self) -> dict[str, int]:
+    def cnt(self) -> dict[str, int]:
+        """ Element counts """
         raise NotImplementedError
 
     def to_mass(self, moles: float) -> float:
@@ -38,7 +41,7 @@ class Molecule(metaclass=ABCMeta):
         raise NotImplementedError
 
     def __expr__(self):
-        return self.counts
+        return self.cnt
 
     # TODO Iteration
     def __iter__(self):
@@ -48,17 +51,21 @@ class Molecule(metaclass=ABCMeta):
         pass
 
 
-class Mixture(dict[Molecule, int]):
+class Mixture(metaclass=ABCMeta):
+    """ Interface: A Mixture"""
+
     @abstractmethod
     def __init__(self):
         super().__init__()
 
     @property
-    def counts(self) -> dict[str, int]:
+    def cnt(self) -> dict[Compound, int]:
+        """ Compound counts """
         raise NotImplementedError
 
     @property
-    def raw(self) -> dict[Molecule, int]:
+    def element_cnt(self) -> dict[str, int]:
+        """ Total element counts """
         raise NotImplementedError
 
 
@@ -69,17 +76,25 @@ class StoicInterface(metaclass=ABCMeta):
     def impl_type(self):
         raise NotImplementedError
 
-    def cal_molar_mass(self, c: Molecule) -> float:
+    def cal_molar_mass(self, c: Compound) -> float:
         raise NotImplementedError
 
-    def cal_moles(self, c: Molecule, mass) -> float:
+    def cal_moles(self, c: Compound, mass) -> float:
         raise NotImplementedError
 
-    def cal_mass(self, c: Molecule, moles) -> float:
+    def cal_mass(self, c: Compound, moles) -> float:
         raise NotImplementedError
 
-    def balance(self, reactants: Mixture, p: Mixture) -> tuple[Mixture, Mixture]:
-        """ Returns None if impossible """
+    def is_balanced(self, r: Mixture, p: Mixture) -> bool:
+        """ Returns if balanced. """
+        raise NotImplementedError
+
+    def can_balance(self, r: Mixture, p: Mixture) -> bool:
+        """ Returns two bools. """
+        raise NotImplementedError
+
+    def balance(self, r: Mixture, p: Mixture) -> bool:
+        """ Returns failure """
         raise NotImplementedError
 
     def cal_p_y(self) -> float:

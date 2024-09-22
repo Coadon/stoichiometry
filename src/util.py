@@ -1,9 +1,12 @@
-from src.interf import Molecule, Mixture, StoicInterface
+import math
+from functools import reduce
+
+from src.interf import Compound, Mixture, StoicInterface
 
 
-def molecule(formula: str) -> Molecule:
-    from src.custom import MoleculeImpl
-    return MoleculeImpl(formula)
+def molecule(formula: str) -> Compound:
+    from src.custom import CompoundImpl
+    return CompoundImpl(formula)
 
 
 def mixture(formula: str) -> Mixture:
@@ -12,9 +15,16 @@ def mixture(formula: str) -> Mixture:
 
 
 @property
-def stoic(formula: str) -> StoicInterface:
+def stoic() -> StoicInterface:
     from src.custom import stoic
     return stoic
+
+
+def gcd(numbers: list) -> int:
+    if len(numbers) > 2:
+        return reduce(lambda x, y: gcd([x, y]), numbers)
+    else:
+        return math.gcd(numbers[0], numbers[1])
 
 
 class ANSI:

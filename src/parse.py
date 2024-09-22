@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-from interf import Molecule
+from interf import Compound
 from lookup import PT
 
 RE_LETTER = re.compile(r"([A-Z][a-z]*)")
@@ -74,19 +74,19 @@ def parse_formula(formula: str) -> dict:
     return dict(counts)
 
 
-def count_mix(mix: dict[Molecule, int]) -> dict[str, int]:
+def count_mix(mix: dict[Compound, int]) -> dict[str, int]:
     """ Calculate a mix of molecules """
     counts: defaultdict = defaultdict(int)
 
     for mole, mole_cnt in mix.items():
-        for ele, ele_cnt in mole.counts.items():
+        for ele, ele_cnt in mole.cnt.items():
             counts[ele] += mole_cnt * ele_cnt
 
     return dict(counts)
 
 
-def construct_mix(s: str) -> dict[Molecule, int]:
-    from src.custom import MoleculeImpl
+def construct_mix(s: str) -> dict[Compound, int]:
+    from src.custom import CompoundImpl
 
     parts: list[str] = RE_SPACE.split(s)
     full: defaultdict = defaultdict(int)
@@ -105,6 +105,6 @@ def construct_mix(s: str) -> dict[Molecule, int]:
         else:
             count = 1
 
-        full[MoleculeImpl(part[i:])] += count
+        full[CompoundImpl(part[i:])] += count
 
-    return full
+    return dict(full)
